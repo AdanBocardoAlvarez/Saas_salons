@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+   <link rel="stylesheet" href="{% static 'css/style.css' %}">
+   <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+   <style>
+      /* Add your custom styling here */
+      .card {
+         margin-top: 50px;
+      }
+      .form-group {
+         margin-bottom: 20px;
+      }
+      .text-danger {
+         font-size: 80%;
+      }
+   </style>
+{% endblock css %}
+
+{% block body %}
+  <div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header">
+            <h4 class="mb-0">{{ _('Signup') }}</h4>
+          </div>
+          <div class="card-body">
+            <form method="post" class="">
+              {% csrf_token %}
+              {% if form.errors %}
+                <div class="alert alert-danger" role="alert">
+                  {% for field, errors in form.errors.items %}
+                    <strong>{{ field|capfirst }}</strong>: {{ errors|join:", " }}
+                  {% endfor %}
+                </div>
+              {% endif %}
+              {% if messages %}
+                {% for message in messages %}
+                  <div class="alert alert-{{ message.tags }}" role="alert">
+                    {{ message }}
+                  </div>
+                {% endfor %}
+              {% endif %}
+              {{ form.as_p }}
+              <!-- Add other form fields here -->
+              <div class="form-group">
+                <button type="submit" class="btn btn-add rounded-pill">{{ _('Signup') }}</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock body %}

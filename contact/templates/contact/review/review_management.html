@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/fontawesome/4.7.0/css/font-awesome.min.css">
+  <style>
+    .star-rating span { font-size: 20px; color: #ffca08; }
+    .action-links a {
+      margin-right: 10px;
+      color: #007bff;
+    }
+    .action-links a:hover {
+      color: #0056b3;
+      text-decoration: none;
+    }
+  </style>
+{% endblock css %}
+
+{% block body %}
+
+<div class="container my-5 py-5">
+  <div class="row p-3">
+    <div class="col-md-10 heading-section ftco-animate">
+      <h2 class="">Verwaltung von Bewertungen</h2>
+      <div class="row my-1">
+        <form method="post" action="{% url 'contact:review_create' %}">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <button type="submit" class="btn btn-primary rounded-pill mt-5">Bewertung hinzufügen</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- List Reviews as Table -->
+    <table class="table">
+      <thead class="thead-dark">
+        <tr>
+          <th>Kundenname</th>
+          <th>Friseur</th>
+          <th>Bewertung</th>
+          <th>Kommentar</th>
+          <th>Aktion</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for review in object_list %}
+        <tr>
+          <td>{{ review.customer_name }}</td>
+          <td>{{ review.barber.name }}</td>
+          <td>
+            <div class="star-rating">
+              {% for _ in "12345" %}
+              {% if forloop.counter <= review.rating %}
+                  <span class="fa fa-star"></span>
+              {% else %}
+                  <span class="fa fa-star-o"></span>
+              {% endif %}
+              {% endfor %}
+            </div>
+          </td>
+          <td>{{ review.comment }}</td>
+          <td class="action-links">
+            <a href="{% url 'contact:review_update' pk=review.pk %}" style="color: gold;"><i class="fa fa-edit rounded-pill"></i> </a>
+            <a href="{% url 'contact:review_delete' pk=review.pk %}" style="color: red;"><i class="fa fa-trash rounded-pill"></i> </a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock body %}

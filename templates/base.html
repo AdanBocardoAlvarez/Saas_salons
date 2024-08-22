@@ -1,0 +1,368 @@
+{% load static %}
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>KHARSA STYLE BARBERSHOP UG</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Barlow+Condensed:500,600,700&display=swap" rel="stylesheet">
+
+    <!--FAVICON start-->
+    <link rel="shortcut icon" href="{{ salon_data.web_icon.url }}" type="image/x-icon">
+    <!--FAVICON start-->
+
+    <link rel="stylesheet" href="{% static 'css/animate.css' %}">
+	
+    
+    <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/owl.theme.default.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}">
+
+    <link rel="stylesheet" href="{% static 'css/aos.css' %}">
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+    <link rel="stylesheet" href="{% static 'css/ionicons.min.css' %}">
+
+    <link rel="stylesheet" href="{% static 'css/bootstrap-datepicker.css' %}">
+    <link rel="stylesheet" href="{% static 'css/jquery.timepicker.css' %}">
+
+    
+    <link rel="stylesheet" href="{% static 'css/flaticon.css' %}">
+    <link rel="stylesheet" href="{% static 'css/icomoon.css' %}">
+
+	
+	{% block css %}
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+
+		<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/fontawesome/4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+	{% endblock css %}
+		
+
+  </head>
+  <body>
+
+	<nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+	  <div class="container">
+		<a class="navbar-brand" href="/" style="margin-left: -66px;"><span class=""></span>{{salon_data.owner.name}} UG</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+		  <span class="oi oi-menu"></span> Menu
+		</button>
+
+		<div class="collapse navbar-collapse" id="ftco-nav">
+		  <ul class="navbar-nav ml-auto">
+			  <li class="nav-item {% if request.path == '/' %}active{% endif %}"><a href="/" class="nav-link">Startseite</a></li>
+        <li class="nav-item {% if request.path == '/#price' %}active{% endif %}"><a href="/#price" class="nav-link">Dienstleistungen</a></li>
+        <li class="nav-item {% if request.path == '/#gallery' %}active{% endif %}"><a href="/#gallery" class="nav-link">Galerie</a></li>
+        <li class="nav-item {% if request.path == '/#appointments' %}active{% endif %}"><a href="/#appointments" class="nav-link">Termine</a></li>
+        <li class="nav-item {% if request.path == '/#barber' %}active{% endif %}"><a href="/#barber" class="nav-link">Über uns</a></li>
+        <li class="nav-item {% if request.path == 'contact:contact' %}active{% endif %}"><a href="{% url 'contact:contact' %}" class="nav-link">Kontakt</a></li>
+		  </ul>
+		</div>
+	  </div>
+	</nav>
+
+    <!-- END nav -->
+{% block body %}
+      
+{% endblock body %}
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="reviewModal" tabindex="-1" role="dialog" aria-labelledby="reviewModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="reviewModalLabel">Füge Dein Bewertung Ein</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
+        <!-- Review Form -->
+        <form method="POST" id="reviewForm" class="review-form" action="{% url 'contact:visitor_review_create' %}" enctype="multipart/form-data">
+          {% csrf_token %}
+          {% if messages %}
+            {% for message in messages %}
+                {% if message.tags == 'success' %}
+                    <div class="alert alert-success" role="alert">
+                        {{ message }}
+                    </div>
+                {% elif message.tags == 'error' %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+          {% endif %}
+        <div id="modal-messages"></div>
+        <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label for="id_image">Foto</label>
+                <input type="file" name="image" class="form-control-file" id="id_image">
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="id_barber">Friseur</label>
+                <select name="barber" class="form-control" id="id_barber">
+                  <option value="" selected>Friseur auswählen</option>
+                  {% for barber in barber_list  %}
+                    <option value="{{ barber.id }}">{{ barber.name }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="id_customer_name">Kundenname</label>
+                <input type="text" name="customer_name" class="form-control" id="id_customer_name">
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group">
+                <label for="id_email">Email</label>
+                <input type="email" name="email" class="form-control" id="id_email" required>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group">
+                <label for="id_comment">Kommentar</label>
+                <textarea name="comment" class="form-control" id="id_comment"></textarea>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group">
+                <label for="id_rating">Bewertung</label>
+                <div class="star-rating" onclick="updateRating()">
+                  <input type="radio" name="rating" value="5" id="star-5"><label for="star-5">&#9733;</label>
+                  <input type="radio" name="rating" value="4" id="star-4"><label for="star-4">&#9733;</label>
+                  <input type="radio" name="rating" value="3" id="star-3"><label for="star-3">&#9733;</label>
+                  <input type="radio" name="rating" value="2" id="star-2"><label for="star-2">&#9733;</label>
+                  <input type="radio" name="rating" value="1" id="star-1"><label for="star-1">&#9733;</label>
+                </div>
+                <!-- Hidden input field to store the selected star rating -->
+                <input type="hidden" name="rating" id="ratingInput" value="{{ form.initial.rating }}">
+              </div>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary rounded-pill mt-3" id="submitReviewBtn">Bewertung Einfügen</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section id="reviews-section" class="testimony-section bg-light">
+  <div class="container">
+    <div class="row ftco-animate justify-content-center">
+      <div class="col-md-6 col-lg-5 d-flex">
+        <div class="testimony-img" style="background-image: url({% static 'images/review.jpg' %});"></div>
+      </div>
+      <div class="col-md-6 col-lg-7 py-5 pl-md-5">
+        <div class="row">
+          <div class="col-md-6">
+              <button type="button" class="btn btn-primary rounded-pill mt-3" data-toggle="modal" data-target="#reviewModal">Bewertung Einfügen</button>
+          </div>
+        </div>
+        {% if messages %}
+              {% for message in messages %}
+                  {% if message.tags == 'success' %}
+                      <div class="alert alert-success" role="alert">
+                          {{ message }}
+                      </div>
+                  {% endif %}
+              {% endfor %}
+        {% endif %}
+        <div id="review-messages" style="margin-top: 10px;"></div>
+        <div class="py-md-5" id="all-reviews">
+          <div class="heading-section ftco-animate">
+            <span class="subheading">Testimonium</span>
+            <h2 class="mb-0">Zufriedene Kunden</h2>
+          </div>
+          {% include "include/reviews.html" %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script>
+
+  document.addEventListener('click', function(event) {
+    var menu = document.getElementById('ftco-nav');
+    var button = document.querySelector('[data-toggle="collapse"]');
+
+    if (!menu.contains(event.target) && !button.contains(event.target)) {
+        if (menu.classList.contains('show')) {
+            menu.classList.remove('show');
+            menu.style.height = '0px';
+        }
+    }
+  });
+  // Function to update the hidden input field with the selected star rating
+  function updateRating() {
+    const ratingInput = document.getElementById('ratingInput');
+    const stars = document.querySelectorAll('.star-rating input:checked');
+      
+    if (stars.length > 0) {
+      ratingInput.value = stars[0].value;
+    }
+  }
+
+ $(document).ready(function() {
+    // Function to scroll to a specific element
+    function scrollToElement(selector) {
+        $('html, body').animate({
+            scrollTop: $(selector).offset().top
+        }, 'slow');
+    }
+
+    // Submit review form via AJAX
+    $('#reviewForm').on('submit', function(event){
+        event.preventDefault();
+        console.log('Submitting review form...');
+        var formData = new FormData(this);
+        
+        $.ajax({
+            type: $(this).attr('method'),
+            url: $(this).attr('action'),
+            data: formData,
+            dataType: 'json',
+            headers: {'X-CSRFToken': '{{ csrf_token }}'},
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: function(response){
+                console.log('Review form submitted successfully.');
+                console.log('Response:', response);
+                    $('#all-reviews').html(response.reviews_html);
+                    $('#reviewModal').modal('hide');
+                    $('#reviewForm')[0].reset();
+                    $('#review-messages').html('<div class="alert alert-success" role="alert">' + response.message + '</div>');
+                    scrollToElement('#modal-messages');
+            },
+            error: function(xhr, status, error) {
+                console.error('Error submitting review form:', xhr.responseText);
+                alert('An error occurred. Please try again later.');
+            }
+        });
+    });    
+
+    // Scroll to the messages inside the modal when it appears
+    $('#reviewModal').on('shown.bs.modal', function () {
+        // Scroll to the messages element
+        scrollToElement('#modal-messages');
+    });
+});
+</script>
+
+
+<style>
+  .ftco-nav {
+    transition: height 0.3s ease;
+    overflow: hidden;
+  }
+
+  .show {
+    height: auto !important;
+  }
+</style>
+
+
+    <footer class="ftco-footer ftco-section">
+      <div class="container">
+        <div class="row mb-5">
+          <div class="col-md">
+            <div class="ftco-footer-widget mb-4">
+              <h2 class="ftco-heading-2 logo">{{salon_data.owner.name}}</h2>
+              <p>{{salon_data.owner.about}}</p>
+              <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
+                <li class="ftco-animate"><a href="https://www.linkedin.com/company/kharsa-style-salon/"><span class="icon-linkedin-square"></span></a></li>
+                <li class="ftco-animate"><a href="https://www.instagram.com/kharsa.style/"><span class="icon-instagram"></span></a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-md">
+            <div class="ftco-footer-widget mb-4 ml-md-5">
+              <h2 class="ftco-heading-2">Information</h2>
+              <ul class="list-unstyled">
+                <li><a href="#" class="py-2 d-block">FAQs</a></li>
+                <li><a href="#" class="py-2 d-block">Privacy</a></li>
+                <li><a href="#" class="py-2 d-block">Terms Condition</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-md">
+             <div class="ftco-footer-widget mb-4">
+              <h2 class="ftco-heading-2">Links</h2>
+              <ul class="list-unstyled">
+                <li class="nav-item active"><a href="/" class="nav-link">Startseite</a></li>
+                <li class="nav-item"><a href="/#price" class="nav-link">Dienstleistungen</a></li>
+                <li class="nav-item"><a href="/#gallery" class="nav-link">Galerie</a></li>
+                <li class="nav-item"><a href="/#barber" class="nav-link">Über uns</a></li>
+                <li class="nav-item"><a href="{% url 'contact:contact' %}" class="nav-link">Kontakt</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-md">
+            <div class="ftco-footer-widget mb-4">
+            	<h2 class="ftco-heading-2">HABEN SIE FRAGEN?</h2>
+            	<div class="block-23 mb-3">
+	              <ul>
+	                <li><span class="icon icon-map-marker"></span><span class="text">{{salon_data.owner.address}}</span></li>
+                  <li><span class="icon icon-clock-o"></span><span class="text">{{ salon_data.owner.work_days }} von {{ salon_data.owner.opening_time|time:'H:i' }} bis {{ salon_data.owner.closing_time|time:'H:i' }} Sonntag: Geschloßen</span></li>
+	                <li><a href="#"><span class="icon icon-phone"></span><span class="text">{{salon_data.owner.phone}}</span></a></li>
+	                <li><a href="{% url 'contact:contact' %}"><span class="icon icon-envelope"></span><span class="text">{{salon_data.owner.email}}</span></a></li>
+                  <li><a href="{{ salon_data.owner.website }}"><span class="icon icon-link"></span><span class="text">{{ salon_data.owner.website }}</span></a></li>
+                  <li><a><span class="icon icon-confirmation_number"></span><span class="text">{{ salon_data.owner.tax_id }}</span></a></li>
+                </ul>
+	            </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12 text-center">
+
+            <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+  Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart color-danger" aria-hidden="true"></i> by <a href="https://www.instagram.com/sz.xj?igsh=ZmRhbGtjeHo1eXZs" target="_blank">Mr.Robot</a>
+  <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+  
+
+  <!-- loader -->
+  <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
+
+
+  <script src="{% static 'js/jquery.min.js'%}"></script>
+  <script src="{% static 'js/jquery-migrate-3.0.1.min.js' %}"></script>
+  <script src="{% static 'js/popper.min.js' %}"></script>
+  <script src="{% static 'js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'js/jquery.easing.1.3.js' %}"></script>
+  <script src="{% static 'js/jquery.waypoints.min.js' %}"></script>
+  <script src="{% static 'js/jquery.stellar.min.js' %}"></script>
+  <script src="{% static 'js/owl.carousel.min.js' %}"></script>
+  <script src="{% static 'js/jquery.magnific-popup.min.js' %}"></script>
+  <script src="{% static 'js/aos.js' %}"></script>
+  <script src="{% static 'js/jquery.animateNumber.min.js' %}"></script>
+  <script src="{% static 'js/bootstrap-datepicker.js' %}"></script>
+  <script src="{% static 'js/jquery.timepicker.min.js' %}"></script>
+  <script src="{% static 'js/scrollax.min.js' %}"></script>
+  <script src="{% static 'js/google-map.js' %}"></script>
+  <script src="{% static 'js/main.js' %}"></script>
+  
+
+
+  </body>
+</html>

@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+   <link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% endblock css %}
+
+{% block body %}
+<div class="container py-5 my-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          Eigentümerdetails
+        </div>
+
+        <div class="card-body">
+          <h1 class="logo"><strong></strong><a href="#"><span class=""></span>{{ salon_data.owner.name }}</a>
+            <a href="{% url 'contact:owner_update' pk=salon_data.owner.pk %}" style="color: gold;">
+              <i class="fa fa-edit btn btn-primary rounded-pill"></i></a>
+          </h1>
+          <p class="icon icon-envelope"><strong> E-Mail: </strong> {{ salon_data.owner.email }}</p>
+          <p class="icon icon-phone"><strong> Telefon: </strong> {{ salon_data.owner.phone }}</p>
+          <p class="icon icon-map-marker"><strong> Adresse: </strong> {{ salon_data.owner.address }}</p>
+          <p class="icon icon-link"><strong> Webseite: </strong> <a href="{{ salon_data.owner.website }}">{{salon_data.owner.website }}</a></p>
+          <p class="icon icon-clock-o"><strong> Öffnungszeiten: </strong> {{ salon_data.owner.work_days }} von {{ salon_data.owner.opening_time|time:'H:i' }} bis {{ salon_data.owner.closing_time|time:'H:i' }} Sonntag: Geschloßen</p>
+          <p><strong> Über: </strong> {{ salon_data.owner.about }} </p>
+          <p class="logo"><strong> Logo: </strong><br>
+          <img src="{{ salon_data.owner.logo.url }}" alt="{{ salon_data.owner.name }} Logo"></p>
+          <!-- Add display for other fields as needed -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

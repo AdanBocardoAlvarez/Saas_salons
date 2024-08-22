@@ -1,0 +1,98 @@
+{% load static %}
+<div class="carousel-testimony owl-carousel ftco-animate">
+    {% for review in review_data %}
+    <div class="item">
+      <div class="testimony-wrap pb-4">
+        <div class="text">
+          <p class="mb-4">{{ review.comment }}</p>
+        </div>
+        <div class="d-flex">
+          {% if review.image %}
+          <div class="user-img-c" style="background-image: url({{ review.image.url }})">
+          </div>
+          {% else %}
+          <div class="user-img-c" style="background-image: url({% static 'images/Kharsa-Style-logo.png' %});">
+          </div>
+          {% endif %}
+          <div class="pos ml-3">
+            <p class="name">{{ review.customer_name }}</p>
+            <span class="position">{{ review.barber.name }}</span>
+            <div class="star-rating">
+              {% for _ in "12345" %}
+                  {% if forloop.counter <= review.rating %}
+                      <span class="fa fa-star"></span>
+                  {% else %}
+                      <span class="fa fa-star-o"></span>
+                  {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <style>
+    .user-img-c{
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background-size: cover;
+      background-position: center;
+      margin-bottom: 10px;
+      margin-top: 10px;
+      margin-left: 10px;
+      margin-right: 10px;
+    }
+    @media (max-width: 767px) {
+      .mobile-pagination {
+        text-align: center;
+      }
+      .mobile-pagination .btn {
+        font-size: 13px;
+        padding: 6px 0px;
+        margin: 0px;
+      }
+    }
+    .star-rating span { font-size: 20px; color: #ffca48; }
+    .star-rating input { display: none; }
+    .star-rating label { font-size: 30px; padding: 5px; cursor: pointer; }
+    .star-rating label:hover,
+    .star-rating label:hover ~ label,
+    .star-rating input:checked ~ label { color: #ffca08; }
+  </style>
+  
+  <!-- Pagination -->
+  <div class="pagination justify-content-center mt-4 mobile-pagination">
+    {% if review_data.has_previous %}
+        <a class="btn btn-primary rounded-pill mr-1" href="?page=1#reviews-section">&laquo; Erste</a>
+        <a class="btn btn-primary rounded-pill mr-1" href="?page={{ review_data.previous_page_number }}#reviews-section"><{{ review_data.previous_page_number }} . .</a>
+    {% else %}
+        <span class="btn btn-secondary disabled rounded-pill mr-1">&laquo; Erste</span>
+        <span class="btn btn-secondary disabled rounded-pill mr-1">< ..</span>
+    {% endif %}
+    
+    <span class="current mx-1 mt-1">Seite {{ review_data.number }} von {{ review_data.paginator.num_pages }}</span>
+    
+    {% if review_data.has_next %}
+        <a class="btn btn-primary rounded-pill mx-1" href="?page={{ review_data.next_page_number }}#reviews-section">. . {{ review_data.next_page_number }}></a>
+        <a class="btn btn-primary rounded-pill mr-1" href="?page={{ review_data.paginator.num_pages }}#reviews-section">Letzte &raquo;</a>
+    {% else %}
+        <span class="btn btn-secondary disabled rounded-pill mx-1">.. ></span>
+        <span class="btn btn-secondary disabled rounded-pill mr-1">Letzte &raquo;</span>
+    {% endif %}
+  </div>
+  
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script>
+    $(document).ready(function() {
+        // Check if the URL contains the '?page=' parameter
+        if (window.location.href.includes('?page=')) {
+            // Scroll to the reviews section
+            $('html, body').animate({
+                scrollTop: $('#reviews-section').offset().top
+            }, 'slow');
+        }
+    });
+</script>

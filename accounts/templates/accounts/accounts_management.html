@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<link rel="stylesheet" href="{% static 'css/custom.css' %}">
+{% endblock css %}
+
+{% block body %}
+<div class="container my-5 py-5">
+
+
+
+    <div class="row p-3">
+        <div class="col-md-10 heading-section ftco-animate">
+            <h2>Benutzer verwaltung</h2>
+        </div>
+    </div>
+
+    <a href="{% url 'accounts:account_signup'  %}" class="btn btn-add rounded-pill btn-edit mb-3"><i class="fas fa-edit"></i> Erstellen</a>
+    <!-- List Users as Cards -->
+    <div class="row">
+        {% for account in user_list %}
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="card ">
+                <div class="card-body" style="padding: 10px;">
+                    <h5 class="card-title">{{ account.username }}</h5>
+                    <p class="card-text">{{ account.email }}</p>
+                    <!-- Add other fields as needed -->
+                    <div class="btn-group" role="group">
+                        <a href="{% url 'accounts:edit_user' pk=user.pk %}" class="btn btn-add rounded-pill btn-edit mr-2"><i class="fas fa-edit"></i> Bearbeiten</a>
+                        <a href="{% url 'accounts:delete_user' pk=user.pk %}" class="btn btn-cancel rounded-pill btn-delete"><i class="fas fa-trash-alt"></i> Löschen</a>
+                        {% if not user.is_authenticated %}
+                        <a class="btn btn-add rounded-pill" href="{% url 'accounts:account_login' %}"><i class="fas fa-sign-in-alt"></i> Login</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+
+
+
+    <div class="row p-3">
+        <div class="col-md-10 heading-section ftco-animate">
+            <h2>Profile verwaltung</h2>
+        </div>
+    </div>
+    <!-- User Button (visible only to authenticated users) -->
+    {% if user.is_authenticated %}
+    <a href="{% url 'accounts:create_profile'  %}" class="btn btn-add rounded-pill btn-edit mb-3"><i class="fas fa-edit"></i> Erstellen</a>
+    
+    {% elif not user.is_authenticated %}
+    <!-- Show Login Button for Non-Authenticated Users -->
+    <a class="btn btn-add rounded-pill mb-3" href="{% url 'accounts:account_login' %}"><i class="fas fa-sign-in-alt"></i> Login</a>
+    {% endif %}
+    <div class="row">
+        {% for profile in accounts_list %}
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <div class="card h-100 ">
+                        <div class="card-body pb-5">
+                            <h5 class="card-title"><i class="fas fa-user"></i> <strong>{{ profile.user.username }}</strong></h5>
+                            <div class="list">
+                            <p class="card-text"><i class="fas fa-envelope"></i> Email: {{ profile.user.email }}</p>
+                            <p class="card-text"><i class="fas fa-user"></i> Name: {{ profile.user }}</p>
+                            <p class="card-text"><i class="fas fa-calendar-alt"></i> Date of Birth: {{ profile.date_of_birth }}</p>
+                            <p class="card-text"><i class="fas fa-venus-mars"></i> Gender: {{ profile.get_gender_display }}</p>
+                            <p class="card-text"><i class="fas fa-phone"></i> Phone: {{ profile.phone }}</p>
+                            <p class="card-text"><i class="fas fa-map-marker-alt"></i> Address: {{ profile.address }}</p>
+                            <p class="card-text"><i class="fas fa-toggle-on"></i> Active: {{ profile.user.is_active }}</p>
+                            <p class="card-text"><i class="fas fa-sign-in-alt"></i> Last Login: {{ profile.user.last_login }}</p>
+                            </div>
+                        </div>
+                        <div class="btn-group m-2" role="group">
+                            {% if user.is_authenticated %}
+                            <a href="{% url 'accounts:edit_profile' pk=user.pk %}" class="btn btn-add rounded-pill btn-edit mr-2"><i class="fas fa-edit"></i> Bearbeiten</a>
+                            <a href="{% url 'accounts:delete_profile' pk=user.pk %}" class="btn btn-cancel rounded-pill btn-delete"><i class="fas fa-trash-alt"></i> Löschen</a>
+                            {% elif not user.is_authenticated %}
+                            <a class="btn btn-add rounded-pill" href="{% url 'accounts:account_login' %}"><i class="fas fa-sign-in-alt"></i> Login</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+
+{% endblock %}
+
